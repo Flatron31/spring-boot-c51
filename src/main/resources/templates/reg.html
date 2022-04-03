@@ -37,13 +37,14 @@
 
         <label for="password">Password</label>
         <input type="text" th:field="*{password}" id="password">
-        <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
+        <div style="color:#6b2727" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
 
         <br/>
 
         <input type="submit" value="Add User">
     </div>
 </form>
+<p style="color:#0c0c0c" th:text="${messageUserExist}">Exist user</p>
 
 </body>
 </html>

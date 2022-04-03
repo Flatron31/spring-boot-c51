@@ -10,6 +10,7 @@ import com.example.springbootc51.repository.UserRepository;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -17,55 +18,58 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-
     @GetMapping
     public String home() {
-        if (userRepository.findById(1L) == null) {
-            userRepository.save(new User("test1", "test1"));
-            userRepository.save(new User("test2", "test2"));
-            userRepository.save(new User("test3", "test3"));
+        if (userRepository.findById(1L).isPresent()) {
+            return "index";
         }
-        return "templates/index";
+        userRepository.save(new User("test1", "test1"));
+        userRepository.save(new User("test2", "test2"));
+        userRepository.save(new User("test3", "test3"));
+        return "index";
     }
 
     @GetMapping("/reg")
     public String reg(@ModelAttribute("user") User user) {
-        return "templates/reg";
+        return "reg";
     }
 
     @PostMapping("/reg")
-    public String reg(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
+    public String reg(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()){
-            return "templates/reg";
+            return "reg";
         }
-
+        if (userRepository.findByUsername(user.getName()).isPresent()){
+            model.addAttribute("messageUserExist", "User exist");
+            return "reg";
+        }
         userRepository.save(user);
         return "redirect:/";
     }
 
+
+
     @GetMapping("/login")
     public String login(@ModelAttribute("user") User user){
-        return "user/login";
+        return "login";
     }
 
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute("user") User user, BindingResult bindingResult,
                         HttpSession session, Model model){
         if (bindingResult.hasErrors()){
-            return "user/login";
+            return "login";
         }
-        User userFromDB = new User();
-
-//        if (userRepository.findByUsername(user.getName()) != null) {
-//            Optional<User> userFromDB = userRepository.findByUsername(user.getName());
-//            if (userFromDB.getPassword().equals(user.getPassword())) {
-//                session.setAttribute("user", userFromDB);
-//            }
-//        } else {
-//            model.addAttribute("messageError", "User exist");
-//            return "user/login";
-//        }
-        return "user/index";
+        else if (userRepository.findByUsername(user.getName()) != null) {
+            User userFromDB = userRepository.findByUsername(user.getName()).orElse(null);
+            if (userFromDB.getPassword().equals(user.getPassword())) {
+                session.setAttribute("user", userFromDB);
+            }
+        } else {
+            model.addAttribute("messageUserExist", "User exist");
+            return "login";
+        }
+        return "index";
     }
 
     @GetMapping("/logout")
@@ -81,14 +85,14 @@ public class UserController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") long id){
         model.addAttribute("user", userRepository.findById(id));
-        return "user/edit";
+        return "edit";
     }
 
 
     @PatchMapping("/{id}")
     public String update(@Valid @ModelAttribute("user") User user,BindingResult bindingResult, HttpSession session){
         if (bindingResult.hasErrors()){
-            return "user/edit";
+            return "edit";
         }
         session.setAttribute("user", user);
         userRepository.save(user);

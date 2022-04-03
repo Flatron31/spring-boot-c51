@@ -28,9 +28,9 @@
   </nav>
 </div>
 
-<div th:if="${messageError}">
+<div th:if="${messageUserExist}">
 
-  <p style="color:red" th:text="${messageError}">invalid user</p>
+  <p style="color:red" th:text="${messageUserExist}">invalid user</p>
 </div>
 
 <form th:method="POST" th:action="@{/login}" th:object="${user}">

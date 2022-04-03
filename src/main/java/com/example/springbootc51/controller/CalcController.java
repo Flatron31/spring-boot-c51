@@ -21,24 +21,24 @@ import java.util.List;
 @Controller
 public class CalcController {
 
-    @Autowired
     private OperationRepository operationRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
-
+    public CalcController(OperationRepository operationRepository, UserRepository userRepository) {
+        this.operationRepository = operationRepository;
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/calc")
     public String calc(@ModelAttribute("operation") Operation operation) {
-        return "calc/calc";
+        return "calc";
     }
 
     @PostMapping("/calc")
     public String calc(@ModelAttribute("operation") @Valid Operation operation, BindingResult bindingResult,
                        HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
-            return "calc/calc";
+            return "calc";
         }
         Double res = OperationService.getResultOperation(operation);
         model.addAttribute("result", res);
@@ -49,13 +49,13 @@ public class CalcController {
         operationList.add(operation);
         user.setOperation(operationList);
         userRepository.save(user);
-        return "calc/calc";
+        return "calc";
     }
 
     @GetMapping("/history")
     public String history(@ModelAttribute("operation") Operation operation, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("history", user.getOperation());
-        return "user/history";
+        return "history";
     }
 }
