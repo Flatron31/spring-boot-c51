@@ -101,7 +101,7 @@ public class UserController {
         }
         session.setAttribute("user", user);
         userRepository.save(user);
-        return "index";
+        return "edit";
     }
 
     @DeleteMapping("/{id}")
