@@ -28,10 +28,6 @@
   </nav>
 </div>
 
-<div th:if="${messageUserExist}">
-
-  <p style="color:red" th:text="${messageUserExist}">invalid user</p>
-</div>
 
 <form th:method="POST" th:action="@{/login}" th:object="${user}">
   <div>
@@ -50,6 +46,10 @@
     <input type="submit" value="Login">
   </div>
 </form>
+
+<div th:if="${messageUserExist}">
+  <p style="color:red" th:text="${messageUserExist}">invalid user</p>
+</div>
 
 </body>
 </html>

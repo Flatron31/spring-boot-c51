@@ -10,5 +10,4 @@ public class SpringBootC51Application {
         SpringApplication.run(SpringBootC51Application.class, args);
 
     }
-
 }

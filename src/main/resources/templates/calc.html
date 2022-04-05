@@ -29,13 +29,13 @@
     <input type="text" th:field="*{value1}" id="value1" placeholder="Value 1">
     <td th:if="${#fields.hasErrors('value1')}" th:errors="*{value1}">value1 error</td>
     <br>
-    <select th:field="*{operation}" id="operation">
+    <select th:field="*{action}" id="action">
         <option value="sum">+</option>
         <option value="dif">-</option>
         <option value="mult">*</option>
         <option value="div">/</option>
     </select>
-    <td th:if="${#fields.hasErrors('operation')}" th:errors="*{operation}">operation error</td>
+    <td th:if="${#fields.hasErrors('action')}" th:errors="*{action}">action error</td>
     <br>
     <input type="text" th:field="*{value2}" id="value2" placeholder="Value 2">
     <td th:if="${#fields.hasErrors('value2')}" th:errors="*{value2}">value2 error</td>

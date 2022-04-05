@@ -28,7 +28,7 @@
 <br>
 
 <div th:each="operation : ${history}">
-    <p th:text="${operation.getValue1() + ' ' + operation.getOperation() + ' ' + operation.getResult() + ' = ' + operation.getResult() }"></p>
+    <p th:text="${operation.getValue1() + ' ' + operation.getAction() + ' ' + operation.getResult() + ' = ' + operation.getResult() }"></p>
 </div>
 
 <div th:if="${#lists.isEmpty(history)}">

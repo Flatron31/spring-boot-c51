@@ -2,7 +2,6 @@ package com.example.springbootc51.controller;
 
 import com.example.springbootc51.entity.Operation;
 import com.example.springbootc51.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,14 +34,14 @@ public class CalcController {
     }
 
     @PostMapping("/calc")
-    public String calc(@ModelAttribute("operation") @Valid Operation operation, BindingResult bindingResult,
+    public String calc(@Valid @ModelAttribute("operation") Operation operation, BindingResult bindingResult,
                        HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             return "calc";
         }
-        Double res = OperationService.getResultOperation(operation);
-        model.addAttribute("result", res);
-        operation.setResult(res);;
+        Double result = OperationService.getResultOperation(operation);
+        model.addAttribute("result", result);
+        operation.setResult(result);
         operationRepository.save(operation);
         User user = (User) session.getAttribute("user");
         List<Operation> operationList = user.getOperation();
